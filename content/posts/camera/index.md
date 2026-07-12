@@ -28,7 +28,7 @@ What this entailed, in my brain, was that my camera is fixed on a sphere with a 
 
 Basically, if in point A, you drag your mouse to the right and a bit up, you'd end up in the point B, at exactly the same distance `radius` from the center of the sphere.
 
-The center of the sphere, in the future, will be out character.
+The center of the sphere, in the future, will be our character.
 
 So, I went ahead and searched extensively on how this can be portrayed from a 2d movement. The initial answer was.. cross products. So, obviously, as I had completely forgotten what cross products are and what they intend to achieve, I went to 3B1B's videos and had a quick refresher. By the way, I really recommend this channel, it made me visualize a lot of concepts in a physical manner: www.youtube.com/shorts/94nxKCafsn8 .
 

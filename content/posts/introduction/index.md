@@ -3,7 +3,7 @@ title: "Introduction"
 date: 2026-07-12T14:05:01+03:00
 ---
 
-To whomever is unfortunate has reached this page after frantically clicking every [GENERIC BROWSER ENGINE] result:
+To whomever is unfortunate enough to have reached this page after frantically clicking every [GENERIC BROWSER ENGINE] result:
 
 I am sorry to inform you that I have no prior experience in game development. ESPECIALLY 3D game development.
 
