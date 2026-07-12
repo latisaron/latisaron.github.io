@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Camera | Turla Game Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="I did not know exactly where to start, so I imagined that the first thing I should be able to achieve in my game is.. well.. look around?
+I added the bevy crate to my project and hammered away at mathematics for about 8 hours.
+The first thing I did, without much knowledge was to steal code from Bevy&rsquo;s example page and drop it in my code.
+
+So far so good, I have an object to look at.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/camera/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.81b0e03b2c825033e624f4830f178b9b514b677ae66ea1380e55c8bc39805cbc.css" integrity="sha256-gbDgOyyCUDPmJPSDDxeLm1FLZ3rmbqE4DlXIvDmAXLw=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/camera/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Turla Game Blog (Alt + H)">Turla Game Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="http://localhost:1313/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Camera
+    </h1>
+    <div class="post-meta">
+
+<span title='2026-07-12 14:05:11 +0300 EEST'>July 12, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content md-content"><p>I did not know exactly where to start, so I imagined that the first thing I should be able to achieve in my game is.. well.. look around?</p>
+<p>I added the <code>bevy</code> crate to my project and hammered away at mathematics for about 8 hours.</p>
+<p>The first thing I did, without much knowledge was to steal code from <a href="https://bevy.org/examples/3d-rendering/3d-scene/">Bevy&rsquo;s example page</a> and drop it in my code.</p>
+<p><img alt="Pretty Cube" loading="lazy" src="/posts/camera/bevy_basic.png"></p>
+<p>So far so good, I have an object to look at.</p>
+<p>I have fiddled with fixed cameras before for 2D games, and all of that was good and fun. Dragging across a 2D plane, would keep you in that 2D plane, zug zug, job&rsquo;s done.</p>
+<p>However, in 3D, that&rsquo;s not quite as simple, because well, you&rsquo;ve got 2 approaches to the camera:</p>
+<ol>
+<li>Zoom in/ out, which is generally done through the mouse wheel drag.</li>
+<li>Rotate around, which is done with the mouse click + drag.</li>
+</ol>
+<p>So, I first dealt with rotation, as it felt more natural.</p>
+<p>What this entailed, in my brain, was that my camera is fixed on a sphere with a certain radius, just walking along the surface of that sphere.</p>
+<p><img alt="Basic Problem Setup" loading="lazy" src="/posts/camera/basis.png"></p>
+<p>Basically, if in point A, you drag your mouse to the right and a bit up, you&rsquo;d end up in the point B, at exactly the same distance <code>radius</code> from the center of the sphere.</p>
+<p>The center of the sphere, in the future, will be out character.</p>
+<p>So, I went ahead and searched extensively on how this can be portrayed from a 2d movement. The initial answer was.. cross products. So, obviously, as I had completely forgotten what cross products are and what they intend to achieve, I went to 3B1B&rsquo;s videos and had a quick refresher. By the way, I really recommend this channel, it made me visualize a lot of concepts in a physical manner: <a href="https://www.youtube.com/shorts/94nxKCafsn8">www.youtube.com/shorts/94nxKCafsn8</a> .</p>
+<p>So, in theory, the first thing I need to do is to translate the movement from my 2d plane in which the cursor moves, to the 3d plane of the sphere.</p>
+<p>First of all, I must mention that the <code>radius_vec</code> is just the vector from the origin to the current point that the camera situates itself in.</p>
+<p>In order to do that, the first thing is to find out what the tangent plan to the current point is, because that&rsquo;s where I&rsquo;ll be defining my movement direction.</p>
+<p>So</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> sideway_direction <span style="color:#f92672">=</span> Vec3::Y.cross(radius_vec).normalize();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> up_direction <span style="color:#f92672">=</span> radius_vec.cross(sideway_direction).normalize();
+</span></span></code></pre></div><p>This way, we&rsquo;re getting 2 axes, <code>sideway_direction</code> and <code>up_direction</code> which create a plane upon which the <code>radius_vec</code> representing the vector from the origin to the point A is perpendicular.</p>
+<p>We&rsquo;re normalizing this, because we&rsquo;re only interested in directions, not amplitude values.</p>
+<p>Then, we&rsquo;re getting the vector created by the cursor movement in its 2D plane: [dx, dy].</p>
+<p>We&rsquo;re going to translate that into a free vector, in our [sideway_direction, up_direction] plane, by a simple multiplication + addition.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> movement_direction <span style="color:#f92672">=</span> (sideway_direction <span style="color:#f92672">*</span> dx <span style="color:#f92672">+</span> up_direction <span style="color:#f92672">*</span> dy).normalize();
+</span></span></code></pre></div><p>Now, we know which direction the point should move towards.</p>
+<p>The amplitude of the movement (the distance we&rsquo;re be going to be doing) is just a <code>(dx * dx + dy * dy).sqrt()</code>.</p>
+<p>Now comes the weird part.</p>
+<p>What we need to do, is rotate our original radius vector, which regards to an axis based on this plane and movement vector, to end up in point B on the sphere.</p>
+<p>So, in order to get that axis, we need a vector perpendicular to the (radius_vec, movement_direction) plane.. so.. cross products?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> axis <span style="color:#f92672">=</span> radius_vec.cross(movement_direction);
+</span></span></code></pre></div><p>So now, this is where the mathemagical part happens, because we&rsquo;re going to be building a rotation in Rodrigues&rsquo; formula, that&rsquo;s nicely baked in the Bevy engine.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> angle <span style="color:#f92672">=</span> distance <span style="color:#f92672">/</span> radius;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> rotation <span style="color:#f92672">=</span> Quat::from_axis_angle(axis, angle);
+</span></span></code></pre></div><p>What&rsquo;s left here is to rotate my vector across that computed axis, based on the angle, to reach the correct point:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>radius_vec.rotate_around(center, rotation);
+</span></span></code></pre></div><p>The graphic below helped me tie it all together:</p>
+<p><img alt="Cross Product Vision" loading="lazy" src="/posts/camera/cross.png"></p>
+<p>Cool, this was .. achieved! It actually works, I hardcoded some dx, dy values and let it fly. Then, obviously, like any other average developer, I asked Claude to review my code, and it told me the implementation is solid! GOLD! (though I don&rsquo;t really trust LLMs, and their output in scenarios like this is questionable). It did tell me that my approach was complex, and most game engines, such as Unity use a thing called an Orbit Camera.</p>
+<p>Hmm.. interesting..</p>
+<p>So I looked into it, and we&rsquo;ve got this things called yaw, pitch and radius. I for sure know what radius is, and I&rsquo;ve found out that apparently:</p>
+<ol>
+<li>yaw is the angle upon the vector has moved projected in the [x,z] plane</li>
+<li>pitch is the angle upon the vector has moved projected in the [y,z] plane</li>
+</ol>
+<p>So.. I went ahead and did some maths to find out what exactly happens here, and why this yields similar results to the cross products.</p>
+<p><img alt="Orbit Camera Vision" loading="lazy" src="/posts/camera/orbit.png"></p>
+<p>I&rsquo;ve moved the points A and B for ease of use, but basically, this is just very simple unexpensive mathematics based on angles, which from an initial point A, I can compute the new relative point B in 3d space based on 2D movements, such as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>orbit.yaw <span style="color:#f92672">-=</span> delta.x;
+</span></span><span style="display:flex;"><span>orbit.yaw <span style="color:#f92672">=</span> orbit.yaw.rem_euclid(std::<span style="color:#66d9ef">f32</span>::consts::<span style="color:#66d9ef">TAU</span>);;
+</span></span><span style="display:flex;"><span>orbit.pitch <span style="color:#f92672">=</span> (orbit.pitch <span style="color:#f92672">+</span> delta.y).clamp(<span style="color:#f92672">-</span><span style="color:#66d9ef">MAX_PITCH</span>, <span style="color:#66d9ef">MAX_PITCH</span>);
+</span></span></code></pre></div><p>At this point, dx and dy represent just the values by which the angles are being modified.</p>
+<p>You can see weird things I&rsquo;ve done here:</p>
+<ol>
+<li>I&rsquo;ve constrained the yaw between [0, 2pi], as the cos/ sin functions are periodcal.</li>
+<li>I&rsquo;ve constrained the pitch between <code>-MAX_PITCH</code> and <code>MAX_PITCH</code>, as once you get very close to the <code>Oy</code>, the camera starts acting up.</li>
+</ol>
+<p>After this, I&rsquo;ve got a nice new B point:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> x <span style="color:#f92672">=</span> orbit.radius <span style="color:#f92672">*</span> orbit.pitch.cos() <span style="color:#f92672">*</span> orbit.yaw.sin();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> y <span style="color:#f92672">=</span> orbit.radius <span style="color:#f92672">*</span> orbit.pitch.sin();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> z <span style="color:#f92672">=</span> orbit.radius <span style="color:#f92672">*</span> orbit.pitch.cos() <span style="color:#f92672">*</span> orbit.yaw.cos();
+</span></span></code></pre></div><p>This is less expensive than computing 3 cross products, and generally simpler to wrap my head around, so I&rsquo;ll go with this one moving forward.</p>
+<p>Now, what remains to be done is the zoom.. In my understanding, if I zoom in or out, I just modify the radius, therefore, the amplitude of the vector. My hypothesis here is that if I modify the amplitude of the vector by a factor of <code>c</code>, then it&rsquo;s [x, y, z] values will be modified by the same factor of <code>c</code>.</p>
+<p><img alt="Zoom Vision" loading="lazy" src="/posts/camera/zoom.png"></p>
+<p>And well, after some basic maths, that seems indeed to be the case.</p>
+<p>So after all that, I just get:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// only delta.y is relevant, because we&#39;re not implementing sideway scrolling
+</span></span></span><span style="display:flex;"><span>orbit.radius <span style="color:#f92672">=</span> (orbit.radius <span style="color:#f92672">-</span> delta.y).clamp(<span style="color:#66d9ef">MIN_RADIUS</span>, <span style="color:#66d9ef">MAX_RADIUS</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> x <span style="color:#f92672">=</span> orbit.radius <span style="color:#f92672">*</span> orbit.pitch.cos() <span style="color:#f92672">*</span> orbit.yaw.sin();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> y <span style="color:#f92672">=</span> orbit.radius <span style="color:#f92672">*</span> orbit.pitch.sin();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> z <span style="color:#f92672">=</span> orbit.radius <span style="color:#f92672">*</span> orbit.pitch.cos() <span style="color:#f92672">*</span> orbit.yaw.cos();
+</span></span></code></pre></div><p>So, after all of this, we&rsquo;ve got a functional drag and scroll camera which fixates on my pretty cube!</p>
+<p>I think the next step will be to make the cube jump around, but boy am I scared of the object contact physics. I think I&rsquo;ll be using avian3d for this.</p>
+<p>See you later!</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/">Turla Game Blog</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

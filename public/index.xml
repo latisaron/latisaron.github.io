@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Turla Game Blog</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Turla Game Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 12 Jul 2026 14:05:11 +0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camera</title>
+      <link>http://localhost:1313/posts/camera/</link>
+      <pubDate>Sun, 12 Jul 2026 14:05:11 +0300</pubDate>
+      <guid>http://localhost:1313/posts/camera/</guid>
+      <description>&lt;p&gt;I did not know exactly where to start, so I imagined that the first thing I should be able to achieve in my game is.. well.. look around?&lt;/p&gt;
+&lt;p&gt;I added the &lt;code&gt;bevy&lt;/code&gt; crate to my project and hammered away at mathematics for about 8 hours.&lt;/p&gt;
+&lt;p&gt;The first thing I did, without much knowledge was to steal code from &lt;a href=&#34;https://bevy.org/examples/3d-rendering/3d-scene/&#34;&gt;Bevy&amp;rsquo;s example page&lt;/a&gt; and drop it in my code.&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&#34;Pretty Cube&#34; loading=&#34;lazy&#34; src=&#34;http://localhost:1313/posts/camera/bevy_basic.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;So far so good, I have an object to look at.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Introduction</title>
+      <link>http://localhost:1313/posts/introduction/</link>
+      <pubDate>Sun, 12 Jul 2026 14:05:01 +0300</pubDate>
+      <guid>http://localhost:1313/posts/introduction/</guid>
+      <description>&lt;p&gt;To whomever is unfortunate has reached this page after frantically clicking every [GENERIC BROWSER ENGINE] result:&lt;/p&gt;
+&lt;p&gt;I am sorry to inform you that I have no prior experience in game development. ESPECIALLY 3D game development.&lt;/p&gt;
+&lt;p&gt;Realistically, I have been a software engineer for about 5 years, writing HTML on top of HTML on top of legacy services, and all of that has become quite boring to me. So, the only conclusion I could come up with was that I needed to start playing video games, AGAIN, to relive my childhood bliss. I played Valheim for hours on end, which is a masterpiece of a game. This was the catalyst which made me wonder if I could make a cool game that people would write silly blogs about.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,16 @@
+baseURL = "https://latisaron.github.io/"
+languageCode = "en-us"
+title = "Turla Game Blog"
+theme = "PaperMod"
+
+[params]
+  defaultTheme = "auto"
+
+  [params.homeInfoParams]
+    Title = "Turla Game Blog"
+    Content = "Game development notes, reviews, and experiments."
+
+[[menu.main]]
+  name = "Posts"
+  url = "/posts/"
+  weight = 1

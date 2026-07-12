@@ -1,0 +1,20 @@
+{{ define "main" }}
+
+<div class="post-list">
+  {{ range .Site.RegularPages.ByDate }}
+  <article class="post-card">
+    <h2 class="post-card-title">
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </h2>
+    <div class="post-card-meta">
+      {{ .Date.Format "January 2, 2006" }} · {{ .ReadingTime }} min read
+    </div>
+    <p class="post-card-excerpt">
+      {{ .Summary | plainify | truncate 160 }}
+    </p>
+    <a class="post-card-more" href="{{ .RelPermalink }}">Read more →</a>
+  </article>
+  {{ end }}
+</div>
+
+{{ end }}
