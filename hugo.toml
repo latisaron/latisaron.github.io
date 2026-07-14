@@ -1,11 +1,11 @@
 baseURL = "https://latisaron.github.io/"
 languageCode = "en-us"
-title = "TURLA"
+title = "TURRIS"
 theme = "PaperMod"
 
 [params]
   defaultTheme = "auto"
 
   [params.homeInfoParams]
-    Title = "TURLA"
+    Title = "TURRIS"
     Content = "Game development notes, reviews, and experiments."

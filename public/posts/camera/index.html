@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Camera | TURLA</title>
+<title>Camera | TURRIS</title>
 <meta name="keywords" content="">
 <meta name="description" content="I did not know exactly where to start, so I imagined that the first thing I should be able to achieve in my game is.. well.. look around?
 I added the bevy crate to my project and hammered away at mathematics for about 8 hours.
@@ -74,7 +74,7 @@ So far so good, I have an object to look at.">
     <header class="header">
     <nav class="header-nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="TURLA (Alt + H)">TURLA</a>
+            <a href="http://localhost:1313/" accesskey="h" title="TURRIS (Alt + H)">TURRIS</a>
             <div class="logo-switches">
                 <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
@@ -131,7 +131,7 @@ So far so good, I have an object to look at.">
 <p>What this entailed, in my brain, was that my camera is fixed on a sphere with a certain radius, just walking along the surface of that sphere.</p>
 <p><img alt="Basic Problem Setup" loading="lazy" src="/posts/camera/basis.png"></p>
 <p>Basically, if in point A, you drag your mouse to the right and a bit up, you&rsquo;d end up in the point B, at exactly the same distance <code>radius</code> from the center of the sphere.</p>
-<p>The center of the sphere, in the future, will be out character.</p>
+<p>The center of the sphere, in the future, will be our character.</p>
 <p>So, I went ahead and searched extensively on how this can be portrayed from a 2d movement. The initial answer was.. cross products. So, obviously, as I had completely forgotten what cross products are and what they intend to achieve, I went to 3B1B&rsquo;s videos and had a quick refresher. By the way, I really recommend this channel, it made me visualize a lot of concepts in a physical manner: <a href="https://www.youtube.com/shorts/94nxKCafsn8">www.youtube.com/shorts/94nxKCafsn8</a> .</p>
 <p>So, in theory, the first thing I need to do is to translate the movement from my 2d plane in which the cursor moves, to the 3d plane of the sphere.</p>
 <p>First of all, I must mention that the <code>radius_vec</code> is just the vector from the origin to the current point that the camera situates itself in.</p>
@@ -206,7 +206,7 @@ So far so good, I have an object to look at.">
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="http://localhost:1313/">TURLA</a></span> · 
+        <span>&copy; 2026 <a href="http://localhost:1313/">TURRIS</a></span> · 
 
     
     
