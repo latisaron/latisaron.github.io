@@ -608,7 +608,7 @@ if hit_ground_or_ceiling {
 }
 ```
 
-In fact, after all that callback, we're NEVER modifying the linear velocity, we're only ever modifying the translation, so kinda like teleporting the object (we take care of that movement). So, imagine that we're really chill, walking along a flat ground, but without updating the y velocity to showcase that the impact has been absorbed by the ground, the Oy gravity will be accumulating. Therefore, the moment you get off the ground, you'd just be zoomed through space falling down.
+In fact, after all that callback, we're NEVER modifying the linear velocity prior to this, we're only ever modifying the translation, so kinda like teleporting the object (it's our responsibility to take care of that movement). So, imagine that we're really chill, walking along a flat ground, but without updating the y velocity to showcase that the impact has been absorbed by the ground, the Oy gravity will be accumulating. Therefore, the moment you get off the ground, you'd just be zoomed through space falling down.
 
 Phew. That was a lot, we still have some, but after that we're done I swear!
 
