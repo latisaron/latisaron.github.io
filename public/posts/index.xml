@@ -6,8 +6,16 @@
     <description>Recent content in Posts on TURRIS</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 12 Jul 2026 14:05:11 +0300</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jul 2026 12:00:00 +0300</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Movement</title>
+      <link>http://localhost:1313/posts/movement/</link>
+      <pubDate>Tue, 14 Jul 2026 12:00:00 +0300</pubDate>
+      <guid>http://localhost:1313/posts/movement/</guid>
+      <description>&lt;p&gt;Okay so, remember how I said I was scared of object contact physics? Yup, I was spot on.&lt;/p&gt;
+&lt;p&gt;So, I tried doing something like really basic on top of the example bevy code. I made my Dynamic Body move around by pressing keys, jump around, all was well. I had no idea what a Dynamic Body is in avian3d, but hey, when it jumped, it went down on its own according to gravity, so that was awesome.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Camera</title>
       <link>http://localhost:1313/posts/camera/</link>

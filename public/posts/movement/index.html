@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Movement | TURRIS</title>
+<meta name="keywords" content="">
+<meta name="description" content="Okay so, remember how I said I was scared of object contact physics? Yup, I was spot on.
+So, I tried doing something like really basic on top of the example bevy code. I made my Dynamic Body move around by pressing keys, jump around, all was well. I had no idea what a Dynamic Body is in avian3d, but hey, when it jumped, it went down on its own according to gravity, so that was awesome.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/movement/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.81b0e03b2c825033e624f4830f178b9b514b677ae66ea1380e55c8bc39805cbc.css" integrity="sha256-gbDgOyyCUDPmJPSDDxeLm1FLZ3rmbqE4DlXIvDmAXLw=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/movement/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="TURRIS (Alt + H)">TURRIS</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Movement
+    </h1>
+    <div class="post-meta">
+
+<span title='2026-07-14 12:00:00 +0300 EEST'>July 14, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content md-content"><p>Okay so, remember how I said I was scared of object contact physics? Yup, I was spot on.</p>
+<p>So, I tried doing something like really basic on top of the example bevy code. I made my Dynamic Body move around by pressing keys, jump around, all was well. I had no idea what a Dynamic Body is in avian3d, but hey, when it jumped, it went down on its own according to gravity, so that was awesome.</p>
+<p>I even did some raycasting to only allow jumps when the angle is less than 70 degrees ( what actually helped me understand what raycasting is was a Roblox raycasting tutorial: <a href="https://www.youtube.com/watch?v=YipkISTwGlc&amp;t=409s)">https://www.youtube.com/watch?v=YipkISTwGlc&amp;t=409s)</a>.</p>
+<p>However, the issues appeared when I spawned a 90 degree wall. I expect to jump at it, and kinda fall along as if gravity didn&rsquo;t exist, like most games do. NOPE.</p>
+<p>What happened is that once I jumped on it while pressing the forward manner, I was actively applying force, thus creating friction. In addition to that, I could basically keep jumping until my ray length was reached, so I could.. do like 7 jumps in a row.</p>
+<p>So.. I went ahead and googled the hell of what&rsquo;s going on, and I found out the next:</p>
+<p>Generally, when writing character controls, you decouple the controllable character with a <code>Kinetic Character Controller</code>, a <code>KCC</code>. What&hellip; is a <code>KCC</code>?</p>
+<p>Glad you asked! Basically avian 3d offers the <code>RigidBody</code> enum as such</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">RigidBody</span> {
+</span></span><span style="display:flex;"><span>	Static,
+</span></span><span style="display:flex;"><span>	Dynamic,
+</span></span><span style="display:flex;"><span>	Kinetic,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol>
+<li><code>RigidBody::Static</code> - this is an immovable object.</li>
+<li><code>RigidBody::Dynamic</code> - this is a movable object, that is governed by the physics engine - a thing in the air, will be under the influence of gravity - hitting this object with enough force, based on its friction, will move it (I think).</li>
+<li><code>RigidBody::Kinetic</code> - this is a movable object, that is not governed by the physics engine - basically, you&rsquo;re on your own here, to roll out everything from linear velocity updates (which get wired in the physics engine), gravity, collision, and basically everything else.</li>
+</ol>
+<p>Cool, so, let&rsquo;s <code>BORROW</code> again: <a href="https://github.com/avianphysics/avian/tree/main/crates/avian3d/examples/kinematic_character_3d">https://github.com/avianphysics/avian/tree/main/crates/avian3d/examples/kinematic_character_3d</a></p>
+<p>So, I&rsquo;ll go through each of the things in the <code>plugin.rs</code> file, as my own understanding dump here, maybe it&rsquo;ll help one day.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// A [`Message`] written for a movement input action.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(Message)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">MovementAction</span> {
+</span></span><span style="display:flex;"><span>	Move(Vector2),
+</span></span><span style="display:flex;"><span>	Jump,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This MovementAction is the message we&rsquo;ll producing prior to the <code>Update</code> systems, through a <code>PreUpdate</code> system, which will be consumed in a <code>FixedUpdate</code> system.</p>
+<p>Apparently:</p>
+<ol>
+<li><code>Update</code> + <code>PreUpdate</code> and <code>FixedUpdate</code> run at different decoupled rates.
+<ol>
+<li>The former produces the input, and the latter consumes it.</li>
+</ol>
+</li>
+<li><code>Update</code> + <code>PreUpdate</code> - runs once per rendered frame</li>
+<li><code>FixedUpdate</code> - runs a fixed number of times per second, as many times in a row needed to consume the accumulated real time - this is because physics need a fixed, deterministic timestep, otherwise a slow computer (which renders frames more slowly) will have the character behave more slowly as opposed to a fast computer.
+<ol>
+<li>A good counter example here is imagining that we run <code>FixedUpdate</code> twice, because it needs to catch up to the accummulated time.</li>
+</ol>
+</li>
+</ol>
+<p><img alt="One" loading="lazy" src="/posts/movement/one.png"></p>
+<ol start="4">
+<li>FixedUpdate runs a SET number of times
+3. Let&rsquo;s say a frame takes 100 ms to load
+4. It means we render 10 frames per second
+5. The fixed_timestamp is 64 Hz, meaning it runs 64 times.
+6. Then, after every render, I&rsquo;ll get a bunch of fixed update runs ( 100 / (1000 / 64) )</li>
+</ol>
+<p>And for these particular reasons, we need to decouple the user input related to movement from the actual frame rendering, and create messages to be consumed, if there are any.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// Sends [`MovementAction`] events based on keyboard input.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">keyboard_input</span>(
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">mut</span> movement_writer: <span style="color:#a6e22e">MessageWriter</span><span style="color:#f92672">&lt;</span>MovementAction<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>	keyboard_input: <span style="color:#a6e22e">Res</span><span style="color:#f92672">&lt;</span>ButtonInput<span style="color:#f92672">&lt;</span>KeyCode<span style="color:#f92672">&gt;&gt;</span>,
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> up <span style="color:#f92672">=</span> keyboard_input.any_pressed([KeyCode::KeyW, KeyCode::ArrowUp]);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> down <span style="color:#f92672">=</span> keyboard_input.any_pressed([KeyCode::KeyS, KeyCode::ArrowDown]);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> left <span style="color:#f92672">=</span> keyboard_input.any_pressed([KeyCode::KeyA, KeyCode::ArrowLeft]);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> right <span style="color:#f92672">=</span> keyboard_input.any_pressed([KeyCode::KeyD, KeyCode::ArrowRight]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> horizontal <span style="color:#f92672">=</span> right <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">i8</span> <span style="color:#f92672">-</span> left <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">i8</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> vertical <span style="color:#f92672">=</span> up <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">i8</span> <span style="color:#f92672">-</span> down <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">i8</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> direction <span style="color:#f92672">=</span> Vector2::new(horizontal <span style="color:#66d9ef">as</span> Scalar, vertical <span style="color:#66d9ef">as</span> Scalar).clamp_length_max(<span style="color:#ae81ff">1.0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	movement_writer.write(MovementAction::Move(direction));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> keyboard_input.just_pressed(KeyCode::Space) {
+</span></span><span style="display:flex;"><span>		movement_writer.write(MovementAction::Jump);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/// Sends [`MovementAction`] events based on gamepad input.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">gamepad_input</span>(<span style="color:#66d9ef">mut</span> movement_writer: <span style="color:#a6e22e">MessageWriter</span><span style="color:#f92672">&lt;</span>MovementAction<span style="color:#f92672">&gt;</span>, gamepads: <span style="color:#a6e22e">Query</span><span style="color:#f92672">&lt;&amp;</span>Gamepad<span style="color:#f92672">&gt;</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> gamepad <span style="color:#66d9ef">in</span> gamepads.iter() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> (Some(x), Some(y)) <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>			gamepad.get(GamepadAxis::LeftStickX),
+</span></span><span style="display:flex;"><span>			gamepad.get(GamepadAxis::LeftStickY),
+</span></span><span style="display:flex;"><span>		) {
+</span></span><span style="display:flex;"><span>			movement_writer.write(MovementAction::Move(
+</span></span><span style="display:flex;"><span>				Vector2::new(x <span style="color:#66d9ef">as</span> Scalar, y <span style="color:#66d9ef">as</span> Scalar).clamp_length_max(<span style="color:#ae81ff">1.0</span>),
+</span></span><span style="display:flex;"><span>			));
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> gamepad.just_pressed(GamepadButton::South) {
+</span></span><span style="display:flex;"><span>			movement_writer.write(MovementAction::Jump);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// A marker component indicating that an entity is using a character controller.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">///
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/// This also requires the entity to have a `CustomPositionIntegration` component, which is used
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/// to prevent Avian from automatically applying the character&#39;s velocity to its position,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/// since the character controller will handle movement manually using move-and-slide.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(Component)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[require(RigidBody::Kinematic, CustomPositionIntegration)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">CharacterController</span>;
+</span></span></code></pre></div><p>This is self explanatory, but this is basically the component we&rsquo;d be using to anything that needs to move according to a controllable path, like a character, or an enemy.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// Component for configuring ground detection for a character controller.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(Component)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">GroundDetection</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// The maximum angle (in radians) where a surface is considered ground/ceiling
+</span></span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// relative to the up-direction. Outside of this angle, surfaces are considered walls.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#e6db74">///
+</span></span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// **Default**: 30 degrees (π / 6 radians)
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> max_angle: <span style="color:#a6e22e">Scalar</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// The maximum distance for ground detection.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> max_distance: <span style="color:#a6e22e">Scalar</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// The shape cast collider used for ground detection.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> cast_shape: Option<span style="color:#f92672">&lt;</span>Collider<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>HaHA! Something I know, this is basically the configuration we&rsquo;ll add to the entity that will define the raycast behaviour for ground detection - we don&rsquo;t want our characters to be able to infinitely jump in the air, or on 90 degree walls. We only want them to jump when they&rsquo;re grounded, and as physics dictates, when they can actually generate force downward which can boost them upwards.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// A marker component indicating that an entity is on a surface that is considered
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/// ground, meaning the steepness is less than [`GroundDetection::max_angle`].
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">///
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">/// Characters that are grounded can jump, and do not slide down slopes.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(Component)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[component(storage = </span><span style="color:#e6db74">&#34;SparseSet&#34;</span><span style="color:#75715e">)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Grounded</span>;
+</span></span></code></pre></div><p>This is quite interesting, because as opposed to my previous impl, when we updated the grounded in each frame, we&rsquo;re now adding or removing this component. The reason we&rsquo;re doing this, is to only query data that we need in future systems. It&rsquo;s similar to SQL, where you&rsquo;d only get specific records based on filters, because there&rsquo;s no way in Bevy where you can filter before the iteration starts.</p>
+<p>Well, now that we&rsquo;re here, this is basically what raycasting does in my brain in order to define if a thing is grounded or not.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// Updates the [`Grounded`] status for character controllers.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">update_grounded</span>(
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">mut</span> commands: <span style="color:#a6e22e">Commands</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">mut</span> query: <span style="color:#a6e22e">Query</span><span style="color:#f92672">&lt;</span>(Entity, <span style="color:#f92672">&amp;</span>GroundDetection, <span style="color:#f92672">&amp;</span>GlobalTransform)<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>	spatial_query: <span style="color:#a6e22e">SpatialQuery</span>,
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (entity, ground_detection, global_transform) <span style="color:#66d9ef">in</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> query {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> Some(collider) <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>ground_detection.cast_shape <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>		};
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> translation <span style="color:#f92672">=</span> global_transform.translation().adjust_precision();
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> rotation <span style="color:#f92672">=</span> global_transform.rotation().adjust_precision();
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Cast the shape downward to check for ground
+</span></span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> hit <span style="color:#f92672">=</span> spatial_query.cast_shape(
+</span></span><span style="display:flex;"><span>			collider,
+</span></span><span style="display:flex;"><span>			translation,
+</span></span><span style="display:flex;"><span>			rotation,
+</span></span><span style="display:flex;"><span>			global_transform.down(),
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&amp;</span>ShapeCastConfig::from_max_distance(ground_detection.max_distance),
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&amp;</span>SpatialQueryFilter::from_excluded_entities([entity]),
+</span></span><span style="display:flex;"><span>		);
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	  
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// The character is grounded if we hit a surface that isn&#39;t too steep
+</span></span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> is_grounded <span style="color:#f92672">=</span> hit.is_some_and(<span style="color:#f92672">|</span>hit<span style="color:#f92672">|</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">let</span> up <span style="color:#f92672">=</span> global_transform.up().adjust_precision();
+</span></span><span style="display:flex;"><span>			(rotation <span style="color:#f92672">*</span> hit.normal1).angle_between(up) <span style="color:#f92672">&lt;=</span> ground_detection.max_angle
+</span></span><span style="display:flex;"><span>		});
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Update grounded state
+</span></span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> is_grounded {
+</span></span><span style="display:flex;"><span>			commands.entity(entity).insert(Grounded);
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			commands.entity(entity).remove::<span style="color:#f92672">&lt;</span>Grounded<span style="color:#f92672">&gt;</span>();
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img alt="two" loading="lazy" src="/posts/movement/two.png"></p>
+<p>The photo above explains it, but basically what happens is:</p>
+<ol>
+<li>Did my ray hit?</li>
+<li>If it didn&rsquo;t, then it&rsquo;s not grounded.</li>
+<li>If it did, then is the angle between the (hit&rsquo;s normal * rotation of the object) and (world up) smaller than an angle?</li>
+<li>If not, not grounded, can&rsquo;t jump, and should slide.</li>
+<li>If it is, add grounded to the entity for future before-iteration filters.</li>
+</ol>
+<p>Now, let&rsquo;s look at movement!</p>
+<p>Then we&rsquo;ve got the big configuration boy:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// Component for configuring movement settings for a character controller.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(Component)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">CharacterMovementSettings</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Normal speed, happening when not speeding.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> normal_speed: <span style="color:#a6e22e">Scalar</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// The damping coefficient used for slowing down movement.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> damping: <span style="color:#a6e22e">Scalar</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// The strength of a jump.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> jump_impulse: <span style="color:#a6e22e">Scalar</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// The gravitational acceleration used for the character.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> gravity: <span style="color:#a6e22e">Vector</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// The maximum speed that gravity can accelerate the character to.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/// This prevents the character from accelerating indefinitely while falling.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">pub</span> terminal_velocity: <span style="color:#a6e22e">Scalar</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// Responds to [`MovementAction`] events and moves character controllers accordingly.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">movement</span>(
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">mut</span> movement_reader: <span style="color:#a6e22e">MessageReader</span><span style="color:#f92672">&lt;</span>MovementAction<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">mut</span> controllers: <span style="color:#a6e22e">Query</span><span style="color:#f92672">&lt;</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&amp;</span>CharacterMovementSettings,
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> LinearVelocity,
+</span></span><span style="display:flex;"><span>		Has<span style="color:#f92672">&lt;</span>Grounded<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>	)<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> event <span style="color:#66d9ef">in</span> movement_reader.read() {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> (movement, <span style="color:#66d9ef">mut</span> linear_velocity, is_grounded) <span style="color:#66d9ef">in</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> controllers {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">match</span> event {
+</span></span><span style="display:flex;"><span>				MovementAction::Move(direction) <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>					linear_velocity.x <span style="color:#f92672">=</span> direction.x <span style="color:#f92672">*</span> movement.normal_speed;
+</span></span><span style="display:flex;"><span>					linear_velocity.z <span style="color:#f92672">=</span> direction.y <span style="color:#f92672">*</span> movement.normal_speed;
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				MovementAction::Jump <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>					<span style="color:#66d9ef">if</span> is_grounded {
+</span></span><span style="display:flex;"><span>						linear_velocity.y <span style="color:#f92672">=</span> movement.jump_impulse;
+</span></span><span style="display:flex;"><span>					}
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>If the event sent here is a Move, then we&rsquo;re modifying the linear velocity on the [x,z] plane.
+If the event sent here is a Jump, then we&rsquo;re modifying the linear velocity on the Oy axis.</p>
+<p>Now, let&rsquo;s take a look at gravity, otherwise our character will just be infinitely going upward.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#e6db74">/// Applies gravity to character controllers.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">apply_gravity</span>(
+</span></span><span style="display:flex;"><span>	time: <span style="color:#a6e22e">Res</span><span style="color:#f92672">&lt;</span>Time<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">mut</span> controllers: <span style="color:#a6e22e">Query</span><span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span>CharacterMovementSettings, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> LinearVelocity)<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> delta_secs <span style="color:#f92672">=</span> time.delta_secs_f64().adjust_precision();
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (movement, <span style="color:#66d9ef">mut</span> linear_velocity) <span style="color:#66d9ef">in</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> controllers {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> gravity_direction <span style="color:#f92672">=</span> movement.gravity.normalize_or_zero();
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> velocity_along_gravity <span style="color:#f92672">=</span> linear_velocity.dot(gravity_direction);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> velocity_along_gravity <span style="color:#f92672">&gt;</span> movement.terminal_velocity {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Don&#39;t apply more gravity if we&#39;re already at terminal velocity.
+</span></span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Calculate the new velocity after applying gravity.
+</span></span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> new_velocity <span style="color:#f92672">=</span> linear_velocity.<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> movement.gravity <span style="color:#f92672">*</span> delta_secs;
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// Don&#39;t exceed terminal velocity.
+</span></span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> new_velocity_along_gravity <span style="color:#f92672">=</span> new_velocity.dot(gravity_direction);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> new_velocity_along_gravity <span style="color:#f92672">&lt;</span> movement.terminal_velocity {
+</span></span><span style="display:flex;"><span>			linear_velocity.<span style="color:#ae81ff">0</span> <span style="color:#f92672">=</span> new_velocity;
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			linear_velocity.<span style="color:#ae81ff">0</span> <span style="color:#f92672">=</span> gravity_direction <span style="color:#f92672">*</span> movement.terminal_velocity;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Ok so.. this is where linear algebra kicked me in the gut for a bit, I didn&rsquo;t understand what the dot product had to do with anything here. It was clear to me that the dot product is used to measure the overlap between the vectors, however, I didn&rsquo;t know WHY that happened, so once again, 3b1b to the rescue: <a href="https://www.youtube.com/watch?v=LyGKycYT2v0">https://www.youtube.com/watch?v=LyGKycYT2v0</a></p>
+<p>However, this made me only more confused, w.r.t. projections and whatnot, so I went ahead and did a lil graphic.</p>
+<p><img alt="Three" loading="lazy" src="/posts/movement/three.png"></p>
+<p>In the first image, the dot product has a positive value.
+In the second image, the dot product is close to 0, or even 0 if the 2 vectors are perpendicular on each other.</p>
+<p><img alt="Four" loading="lazy" src="/posts/movement/four.png"></p>
+<p>Now, let&rsquo;s take that into consideration, and think what the dot product really does.</p>
+<p><img alt="Five" loading="lazy" src="/posts/movement/five.png"></p>
+<p>Let&rsquo;s assume we have a vector, that will be the plane upon which we are going to be transforming our 2d vectors in our 1d (only-length).</p>
+<p>We have the vector u.</p>
+<p>We then have 4 more other vectors, at different angles.</p>
+<p>Using the prior graphic, we can deduce that we can just normalize them, as the dot product result scales with the scale of our vectors.</p>
+<p>Now, we can see that v1n, v2n and v3n have some values, because they&rsquo;re at different angles to u.</p>
+<p>Now, v4n is the interesting one, because that&rsquo;s the perpendicular one, and its dot product (the projection on the u axis) will be 0. This is what the dot product tells us.. HOW MUCH OVERLAP IS BETWEEN MY VECTORS? Obviously, it also tells me the direction of the overlap, for example v3 and v2 are both negative &ldquo;overlaps&rdquo; let&rsquo;s say.</p>
+<p>Okay, going back to our code now, we do</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> velocity_along_gravity <span style="color:#f92672">=</span> linear_velocity.dot(gravity_direction);
+</span></span></code></pre></div><p>Which is basically computing the amplitude of our character in the Oy axis (gravity direction only has y different from 0.).</p>
+<p>However, this amplitude can be either positive, or negative, let&rsquo;s take the next example:</p>
+<ol>
+<li>We press space</li>
+<li>LinearVelocity along the Oy axis gets some positive value <code>POS_VALUE</code>.</li>
+<li>The next time we run this, the dot product will be something like</li>
+</ol>
+<pre tabindex="0"><code>velocity = (0 * linear_velocity.x + (-1) * POS_VALUE + 0 * linear_velocity.z)
+=&gt;
+velocity =  -POS_VALUE
+</code></pre><ol start="4">
+<li>Then we move along to check if our current speed is higher than the limit falling speed</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> velocity_along_gravity <span style="color:#f92672">&gt;</span> movement.terminal_velocity {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Don&#39;t apply more gravity if we&#39;re already at terminal velocity.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="5">
+<li>We compute the new falling velocity, based on how much time it has been since the last <code>FixedUpdate</code></li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> new_velocity <span style="color:#f92672">=</span> linear_velocity.<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> movement.gravity <span style="color:#f92672">*</span> delta_secs;
+</span></span></code></pre></div><ol start="6">
+<li>Now we run the dot product again, to see how the value has changed</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> new_velocity_along_gravity <span style="color:#f92672">=</span> new_velocity.dot(gravity_direction);
+</span></span></code></pre></div><ol start="7">
+<li>Then finally, we update the velocity</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> new_velocity_along_gravity <span style="color:#f92672">&lt;</span> movement.terminal_velocity {
+</span></span><span style="display:flex;"><span>	linear_velocity.<span style="color:#ae81ff">0</span> <span style="color:#f92672">=</span> new_velocity;
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>	linear_velocity.<span style="color:#ae81ff">0</span> <span style="color:#f92672">=</span> gravity_direction <span style="color:#f92672">*</span> movement.terminal_velocity;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>One interesting thing here is that the <code>terminal_velocity</code> is positive. That happens due to the direction of the gravity, which goes towards the negative of Oy axis. Now, if our speed also starts getting negative (after falling enough time), then the product will be positive.</p>
+<p>Pretty neat!</p>
+<p>Now.. onto the monster, which is the <code>move_and_slide</code> logic, which basically ties all of the above together with collision. So I&rsquo;ll take this step by step.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> hit_ground_or_ceiling <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(collisions) <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> collisions {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Clear previous collisions
+</span></span></span><span style="display:flex;"><span>	collisions.<span style="color:#ae81ff">0.</span>clear();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> up <span style="color:#f92672">=</span> transform.up().adjust_precision();
+</span></span></code></pre></div><p>Pretty self explanatory, sets the flag for ground/ ceiling collisions, and clears all previous collisions related to the entity, and computes the <code>up</code> vector.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> MoveAndSlideOutput {
+</span></span><span style="display:flex;"><span>	position: <span style="color:#a6e22e">new_position</span>,
+</span></span><span style="display:flex;"><span>	projected_velocity,
+</span></span><span style="display:flex;"><span>} <span style="color:#f92672">=</span> move_and_slide.move_and_slide(
+</span></span><span style="display:flex;"><span>	collider,
+</span></span><span style="display:flex;"><span>	transform.translation.adjust_precision(),
+</span></span><span style="display:flex;"><span>	transform.rotation.adjust_precision(),
+</span></span><span style="display:flex;"><span>	lin_vel.<span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>	time.delta(),
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&amp;</span>MoveAndSlideConfig::default(),
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&amp;</span>SpatialQueryFilter::from_excluded_entities([entity]),
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">|</span>hit<span style="color:#f92672">|</span> {<span style="color:#f92672">..</span>.}
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>Cool, so according to the docs:</p>
+<ol>
+<li>collider - the shape of the collider for which we are checking for collisions.</li>
+<li>transform.translation.adjust_precision() - where this shape is cast from.</li>
+<li>transform.rotation.adjust_precision() - the rotation of the shape being cast.</li>
+<li>lin_vel.0 - the initial velocity vector along which to move the shape.</li>
+<li>time.delta() - the duration over which to move the shape.</li>
+<li>&amp;MoveAndSlideConfig::default() - configuration that defines move_and_slide behaviour.</li>
+<li>&amp;SpatialQueryFilter::from_excluded_entities([entity]) - what to exclude in the raycasting part, obviously we&rsquo;ll exclude the entity from which the ray is cast.</li>
+<li>|hit| {} - what to do if the raycast hit something - we&rsquo;ll get to that in a bit.</li>
+</ol>
+<p>That&rsquo;s pretty interesting, so what this move and slide does basically is to find out what shape the collider has, which direction it needs to move and slide, and then perform a shapecast along the velocity direction to see if anything gets hit during that movement. If it gets hit midway through the move, it stops at that contact point, and we run the <code>hit</code> callback.</p>
+<p>Let&rsquo;s move on to the <code>hit</code> callback.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> Some(ground_detection) <span style="color:#f92672">=</span> ground_detection <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Early out if we don&#39;t have ground detection.
+</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> MoveAndSlideHitResponse::Accept;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>Basically, we can have <code>move_and_slide</code> for things that do not have ground detection, in which case, we don&rsquo;t need to check the next logic, so we return early.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> angle <span style="color:#f92672">=</span> up.angle_between(hit.normal.adjust_precision());
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> is_ground <span style="color:#f92672">=</span> angle <span style="color:#f92672">&lt;=</span> ground_detection.max_angle;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> is_ceiling <span style="color:#f92672">=</span> is_ground <span style="color:#f92672">&amp;&amp;</span> up.dot(hit.normal.adjust_precision()) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.0</span>;
+</span></span></code></pre></div><p>As before, we compute the hit between the shapecast&rsquo;s normal and the <code>up</code> to see the ground inclination, and the we compute if we&rsquo;re on ground by comparisong with the max allowed angle. Then, again, we do a dot product between the hit&rsquo;s normal and the <code>up</code> direction. If the dot product is negative, it basically means that the normal goes in the other cadran of the plane, so it means the normal is pointing downwards, and it means we reached the ceiling. Cool!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// Decompose the original input velocity into components relative to the hit normal and the up direction,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// to determine how much of the velocity is contributing to climbing, slipping, and unconstrained movement.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> [horizontal_component, vertical_component] <span style="color:#f92672">=</span> split_into_components(lin_vel.<span style="color:#ae81ff">0</span>, up);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">..</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/// Splits a vector into horizontal and vertical components relative to a given `up` direction.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">split_into_components</span>(v: <span style="color:#a6e22e">Vector</span>, up: <span style="color:#a6e22e">Vector</span>) -&gt; [Vector; <span style="color:#ae81ff">2</span>] {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> vertical_component <span style="color:#f92672">=</span> up <span style="color:#f92672">*</span> v.dot(up);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> horizontal_component <span style="color:#f92672">=</span> v <span style="color:#f92672">-</span> vertical_component;
+</span></span><span style="display:flex;"><span>	[horizontal_component, vertical_component]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The next step does exactly what it says, it splits my vector into a vector containing only the Oy values, and a vector containing only the [Ox, Oz] values. So, from (vx, vy, vz), we get (0, vy, 0) and(vx, 0, vz).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// Decompose the horizontal component and the current sliding velocity to determine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// whether the character is trying to climb or slip, and whether it is actually climbing or slipping.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> horizontal_velocity_decomposition <span style="color:#f92672">=</span> decompose_hit_velocity(horizontal_component, <span style="color:#f92672">*</span>hit.normal, up);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> decomposition <span style="color:#f92672">=</span> decompose_hit_velocity(<span style="color:#f92672">*</span>hit.velocity, <span style="color:#f92672">*</span>hit.normal, up);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">..</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/// Decomposes a velocity vector into parts relative to a collision `normal` and an `up` direction.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">decompose_hit_velocity</span>(velocity: <span style="color:#a6e22e">Vector</span>, normal: <span style="color:#a6e22e">Dir</span>, up: <span style="color:#a6e22e">Vector</span>) -&gt; <span style="color:#a6e22e">VelocityDecomposition</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> normal <span style="color:#f92672">=</span> normal.adjust_precision();
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> normal_part <span style="color:#f92672">=</span> normal <span style="color:#f92672">*</span> normal.dot(velocity);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> tangent_part <span style="color:#f92672">=</span> velocity <span style="color:#f92672">-</span> normal_part;
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> horizontal_tangent_dir <span style="color:#f92672">=</span> normal.cross(up).normalize_or_zero();
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> horizontal_tangent <span style="color:#f92672">=</span> tangent_part.dot(horizontal_tangent_dir) <span style="color:#f92672">*</span> horizontal_tangent_dir;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> vertical_tangent <span style="color:#f92672">=</span> tangent_part <span style="color:#f92672">-</span> horizontal_tangent;
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	VelocityDecomposition {
+</span></span><span style="display:flex;"><span>		normal_part,
+</span></span><span style="display:flex;"><span>		horizontal_tangent,
+</span></span><span style="display:flex;"><span>		vertical_tangent,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img alt="Six" loading="lazy" src="/posts/movement/six.png"></p>
+<p>What happens here is quite interesting, let&rsquo;s assume we&rsquo;re in a state in which we&rsquo;d only be going along the [Ox, Oz] plane. While we&rsquo;re on flat ground, that&rsquo;s not an issue, however the real interesting thing happens when we&rsquo;re on a slope.</p>
+<p>Thinking about what happens when we&rsquo;re on a slope, we actually go UP the slope, so our [x, 0.,  z] vector will somehow drive us up the slope, it&rsquo;s not going to push through it, because without a y value, we will not actually be moving upward, according to.. well.. physics?</p>
+<p>Therefore, we need to decompose our movement along the plane of the slope, kind of.</p>
+<p>So, we first split our velocity in a normal and a tangent, by doing the same trick as above.</p>
+<ol>
+<li>Find out how much part of velocity goes along the normal by doing a dot product.</li>
+<li>Get the normal part by doing a <code>normal * normal.dot(velocity)</code></li>
+<li>Get the tangent part by doing a subtract as <code>velocity - normal_part</code></li>
+</ol>
+<p>Now is the interesting part, we actually generate another plane defined by a vector in which the object will actually move!</p>
+<ol>
+<li><code>let horizontal_tangent_dir = normal.cross(up).normalize_or_zero();</code> - generates a perpendicular vector on both <code>up</code> and <code>normal</code>.</li>
+<li><code>let horizontal_tangent = tangent_part.dot(horizontal_tangent_dir) * horizontal_tangent_dir;</code> -  see what part of the tangent goes along the horizontal part</li>
+<li><code>let vertical_tangent = tangent_part - horizontal_tangent;</code> - compute the vertical part, like in the 2d plane along which the obbject will move</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// Decompose the horizontal component and the current sliding velocity to determine
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// whether the character is trying to climb or slip, and whether it is actually climbing or slipping.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> horizontal_velocity_decomposition <span style="color:#f92672">=</span> decompose_hit_velocity(horizontal_component, <span style="color:#f92672">*</span>hit.normal, up);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> decomposition <span style="color:#f92672">=</span> decompose_hit_velocity(<span style="color:#f92672">*</span>hit.velocity, <span style="color:#f92672">*</span>hit.normal, up);
+</span></span></code></pre></div><p>The first decomposition talks about what the object would have wanted to do, if there was no gravity or physics in the mix.</p>
+<p>The second decomposition is more interesting, as it is heavily dependent on the way the  move_and_slide() fn works. In fact, the interesting things are <code>*hit.velocity</code> and <code>*hit.normal</code>. So move_and_slide is actually a loop that runs multiple sweep-and-respond cycles, which might involve bouncing across multiple objects, and the linear velocity only gets updated once per <code>FixedUpdate</code>, whereas the <code>*hit.velocity</code> gets updated in the loop.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// An object is trying to slip if the tangential movement induced by its vertical movement
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// points downward (with a small threshold).
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> slipping_intent <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>up.dot(horizontal_velocity_decomposition.vertical_tangent) <span style="color:#f92672">&lt;</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.001</span>;
+</span></span></code></pre></div><p>The above horizontal velocity decomposition will have a specific vertical tangent despite us only controlling movement in [Ox, Oz] plane, as we explained above.</p>
+<ol>
+<li>If we go up the slope, this dot product will be positive, so it&rsquo;s false.</li>
+<li>If we sit still on the slope, the dot product is 0.</li>
+<li>If we go down the slope, the dot product is negative, and very likely less than -0.001.</li>
+</ol>
+<p>Therefore, this refers to the slipping intent of the character based on its intended movements.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// An object is slipping if its vertical movement points downward (with a small threshold).
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> slipping <span style="color:#f92672">=</span> up.dot(decomposition.vertical_tangent) <span style="color:#f92672">&lt;</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.001</span>;
+</span></span></code></pre></div><p>This works with the <code>decomposition</code>, so this takes into account the gravity, and therefore, if we sit still on a steep enough slope, we kinda slip off it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// An object is trying to climb if its vertical input motion points upward.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> climbing_intent <span style="color:#f92672">=</span> up.dot(vertical_component) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// An object is climbing if the tangential movement induced by its vertical movement points upward.
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> climbing <span style="color:#f92672">=</span> up.dot(decomposition.vertical_tangent) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.0</span>;
+</span></span></code></pre></div><p>Exactly the same as above, but for going in the opposite direction.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> projected_velocity <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">!</span>is_ground <span style="color:#f92672">&amp;&amp;</span> climbing <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>climbing_intent {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Can’t climb the slope, remove the vertical tangent motion induced by the forward motion.
+</span></span></span><span style="display:flex;"><span>	decomposition.horizontal_tangent <span style="color:#f92672">+</span> decomposition.normal_part
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> is_ground <span style="color:#f92672">&amp;&amp;</span> slipping <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>slipping_intent {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Prevent the vertical movement from sliding down.
+</span></span></span><span style="display:flex;"><span>	decomposition.horizontal_tangent <span style="color:#f92672">+</span> decomposition.normal_part
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Otherwise, allow full movement (including climbing and slipping)
+</span></span></span><span style="display:flex;"><span>	decomposition.horizontal_tangent <span style="color:#f92672">+</span> decomposition.vertical_tangent <span style="color:#f92672">+</span> decomposition.normal_part
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>3 branches explained as such:</p>
+<ol>
+<li>If it&rsquo;s not ground that&rsquo;s walkable, the object is being pushed to walk it, and it didn&rsquo;t want to climb, then don&rsquo;t climb - walls, or very steep things.</li>
+<li>If it&rsquo;s ground, gravity existing, but there&rsquo;s no slipping intent, don&rsquo;t move.</li>
+<li>Anything else just move freely.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// Update the current velocity used by the algorithm.
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>hit.velocity <span style="color:#f92672">=</span> projected_velocity;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> is_ground <span style="color:#f92672">||</span> is_ceiling {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// We hit a ground or ceiling surface!
+</span></span></span><span style="display:flex;"><span>	hit_ground_or_ceiling <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(collisions) <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> collisions {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Record the collision for use in other systems, such as applying forces to dynamic bodies.
+</span></span></span><span style="display:flex;"><span>	collisions.<span style="color:#ae81ff">0.</span>push(CharacterCollision {
+</span></span><span style="display:flex;"><span>		collider: <span style="color:#a6e22e">hit</span>.entity,
+</span></span><span style="display:flex;"><span>		point: <span style="color:#a6e22e">hit</span>.point,
+</span></span><span style="display:flex;"><span>		normal: <span style="color:#f92672">*</span>hit.normal,
+</span></span><span style="display:flex;"><span>		character_velocity: <span style="color:#f92672">*</span>hit.velocity,
+</span></span><span style="display:flex;"><span>	});
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Accept the hit and continue the move-and-slide algorithm with the modified velocity.
+</span></span></span><span style="display:flex;"><span>MoveAndSlideHitResponse::Accept
+</span></span></code></pre></div><p>Creates collisions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// Update position to the final position calculated by move-and-slide.
+</span></span></span><span style="display:flex;"><span>transform.translation <span style="color:#f92672">=</span> new_position.<span style="color:#66d9ef">f32</span>();
+</span></span></code></pre></div><p>Updates the position, thank God we&rsquo;re almost done.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// If we hit the ground or a ceiling, update the velocity along the up-direction
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// to prevent accumulating velocity along the ground normal when hitting slopes,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// and to prevent sticking to ceilings when jumping.
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> hit_ground_or_ceiling {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> up <span style="color:#f92672">=</span> up.adjust_precision();
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> velocity_along_up <span style="color:#f92672">=</span> lin_vel.dot(up);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">let</span> new_velocity_along_up <span style="color:#f92672">=</span> projected_velocity.dot(up);
+</span></span><span style="display:flex;"><span>	lin_vel.<span style="color:#ae81ff">0</span> <span style="color:#f92672">+=</span> (new_velocity_along_up <span style="color:#f92672">-</span> velocity_along_up) <span style="color:#f92672">*</span> up;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>In fact, after all that callback, we&rsquo;re NEVER modifying the linear velocity, we&rsquo;re only ever modifying the translation, so kinda like teleporting the object (we take care of that movement). So, imagine that we&rsquo;re really chill, walking along a flat ground, but without updating the y velocity to showcase that the impact has been absorbed by the ground, the Oy gravity will be accumulating. Therefore, the moment you get off the ground, you&rsquo;d just be zoomed through space falling down.</p>
+<p>Phew. That was a lot, we still have some, but after that we&rsquo;re done I swear!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">apply_forces_to_dynamic_bodies</span>(
+</span></span><span style="display:flex;"><span>	characters: <span style="color:#a6e22e">Query</span><span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span>ComputedMass, <span style="color:#f92672">&amp;</span>CharacterCollisions)<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>	colliders: <span style="color:#a6e22e">Query</span><span style="color:#f92672">&lt;&amp;</span>ColliderOf<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">mut</span> rigid_bodies: <span style="color:#a6e22e">Query</span><span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span>RigidBody, Forces)<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (mass, collisions) <span style="color:#66d9ef">in</span> <span style="color:#f92672">&amp;</span>characters {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">let</span> mass <span style="color:#f92672">=</span> mass.value();
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> collision <span style="color:#66d9ef">in</span> <span style="color:#f92672">&amp;</span>collisions.<span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">let</span> Ok(collider_of) <span style="color:#f92672">=</span> colliders.get(collision.collider) <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>			};
+</span></span><span style="display:flex;"><span>			
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">let</span> Ok((rigid_body, <span style="color:#66d9ef">mut</span> forces)) <span style="color:#f92672">=</span> rigid_bodies.get_mut(collider_of.body) <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>			};
+</span></span><span style="display:flex;"><span>			
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#f92672">!</span>rigid_body.is_dynamic() {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">let</span> touch_dir <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>collision.normal.adjust_precision();
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">let</span> relative_velocity <span style="color:#f92672">=</span> collision.character_velocity <span style="color:#f92672">-</span> forces.linear_velocity();
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">let</span> touch_velocity <span style="color:#f92672">=</span> touch_dir.dot(relative_velocity) <span style="color:#f92672">*</span> touch_dir;
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">let</span> impulse <span style="color:#f92672">=</span> touch_velocity <span style="color:#f92672">*</span> mass;
+</span></span><span style="display:flex;"><span>			forces.apply_linear_impulse_at_point(impulse, collision.point);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Well, this is quite cool, it&rsquo;s physics!</p>
+<ol>
+<li>We&rsquo;re computing the direction in which our object will be applying force to the object it collided it.</li>
+<li>We compute the relative velocity (what if the collided object was also moving, how fast and the direction in which it was moving matters! if 2 speeding cars crash going towards each other it&rsquo;s worse than if a speeding car and a stationary car crash)</li>
+<li>We compute the new velocity, and based on it, find out the new impulse</li>
+<li>The mass is a property attributed automatically by the avian3d engine, based on the size of the collider object.</li>
+<li>Apply the forces.</li>
+</ol>
+<p>This was a lot,  but, we found out what this <code>KCC</code> means, and we have a functional walkable object!</p>
+<p>But boy.. was I right to be scared of this..</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/">TURRIS</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
