@@ -35,6 +35,8 @@ Cool, so, let's `BORROW` again: https://github.com/avianphysics/avian/tree/main/
 
 So, I'll go through each of the things in the `plugin.rs` file, as my own understanding dump here, maybe it'll help one day.
 
+## Decoupling movement from render
+
 ```rust
 /// A [`Message`] written for a movement input action.
 
@@ -115,6 +117,8 @@ fn gamepad_input(mut movement_writer: MessageWriter<MovementAction>, gamepads: Q
 #[require(RigidBody::Kinematic, CustomPositionIntegration)]
 pub struct CharacterController;
 ```
+
+## Ground Detection
 
 This is self explanatory, but this is basically the component we'd be using to anything that needs to move according to a controllable path, like a character, or an enemy.
 
@@ -205,6 +209,8 @@ The photo above explains it, but basically what happens is:
 5. If it is, add grounded to the entity for future before-iteration filters.
 
 Now, let's look at movement!
+
+## Actual Movement
 
 Then we've got the big configuration boy:
 
@@ -611,6 +617,8 @@ if hit_ground_or_ceiling {
 In fact, after all that callback, we're NEVER modifying the linear velocity prior to this, we're only ever modifying the translation, so kinda like teleporting the object (it's our responsibility to take care of that movement). So, imagine that we're really chill, walking along a flat ground, but without updating the y velocity to showcase that the impact has been absorbed by the ground, the Oy gravity will be accumulating. Therefore, the moment you get off the ground, you'd just be zoomed through space falling down.
 
 Phew. That was a lot, we still have some, but after that we're done I swear!
+
+## Forces
 
 ```rust
 fn apply_forces_to_dynamic_bodies(
