@@ -1,6 +1,6 @@
 ---
 title: "Player Follows Camera"
-date: 2026-07-17T14:05:01+03:00
+date: 2026-07-17T00:00:01+03:00
 ---
 
 We made the block move, hooray!
